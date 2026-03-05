@@ -70,7 +70,7 @@ Download and install WAMP Server.
 
 2. Clone the Repository
 
-git clone https://github.com/Anchaltandon/ecommerce.git
+git clone https://github.com/jangra2025/ecommerce.git
 
 3. Move Project Folder
 
