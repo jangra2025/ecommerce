@@ -3,33 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    function login(Request $req)
+    function register(Request $req)
     {
-        $req->validate([
-            'name' => 'required|string|max:255', 
-            'email' => 'required|email',
-            'password' => 'required'
+        DB::table('users')->insert([
+            'name' => $req->name,
+            'email' => $req->email,
+            'password' => $req->password
         ]);
 
-        $user = User::where('email', $req->email)->first();
+        return redirect('/login');
+    }
 
-        if (!$user) {
-            $user = User::create([
-                'name' => $req->name,     
-                'email' => $req->email,
-                'password' => Hash::make($req->password)
-            ]);
+    function login(Request $req)
+    {
+        $user = DB::table('users')
+            ->where('email', $req->email)
+            ->where('password', $req->password)
+            ->first();
+
+        if ($user) {
+            Session::put('user', $user);
+            return redirect('/');
         } else {
-            $user->name = $req->name;  
-            $user->password = Hash::make($req->password);
-            $user->save();
+            return back()->with('error', 'Invalid email or password');
         }
+    }
+    public function logout(Request $request)
+    {
+        // Remove the 'user' from session
+        $request->session()->forget('user');
 
-        return $user; 
+        // Optionally, invalidate the session
+        $request->session()->invalidate();
+
+        // Redirect to homepage or login page
+        return redirect('/login');
     }
 }

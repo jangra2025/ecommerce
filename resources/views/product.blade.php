@@ -1,67 +1,60 @@
-<!-- resources/views/product.blade.php -->
 @extends('master')
+
 @section('content')
-    <div class="container custom-product">
-        <div class="row">
+<div class="container-fluid p-0 mt-3">
 
-            <div class="col-md-12">
-                <h2>Products Carousel</h2>
-
-                <div id="productCarousel" class="carousel slide" data-ride="carousel">
-
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        @foreach ($products as $key => $item)
-                            <li data-target="#productCarousel" data-slide-to="{{ $key }}"
-                                class="{{ $key == 0 ? 'active' : '' }}"></li>
-                        @endforeach
-                    </ol>
-
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner">
-                        @foreach ($products as $item)
-                            <div class="item {{ $item['id'] == 1 ? 'active' : '' }}">
-                                 <a href="{{ route('detail', $item['id']) }}">
-                                    <img class="slider-img" src="{{ $item['gallery'] }}" alt="images">
-                                    <div class="carousel-caption">
-                                        <h3>{{ $item->name }}</h3>
-                                        <p>{{ $item->description }}</p>
-                                        <p>Price: ₹{{ $item->price }}</p>
-                                        <p>Category: {{ $item->category }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+    <!-- Carousel Section -->
+    @if(isset($products) && count($products) > 0)
+    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            @foreach ($products as $key => $item)
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}"></button>
+            @endforeach
+        </div>
+        <div class="carousel-inner">
+            @foreach ($products as $key => $item)
+            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                <a href="{{ url('details/'.$item->id) }}">
+                    <img src="{{ $item->gallery }}" class="d-block w-100" style="height:550px; object-fit:cover;">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3>{{ $item->name }}</h3>
+                        <p>{{ $item->description }}</p>
                     </div>
-
-                    <!-- Left and right controls -->
-                    <a class="left carousel-control" href="#productCarousel" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#productCarousel" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-
-                </div>
+                </a>
             </div>
-            <div class="col-md-12 mt-5">
-                <h2>Trending Products</h2>
-                <div class="row">
-                    @foreach ($products as $item)
-                        <div class="col-md-3 text-center mb-4">
-                            <!-- Fixed height & responsive with object-fit -->
-                            <img class="slider-img img-fluid" src="{{ asset($item->gallery) }}" alt="{{ $item->name }}"
-                                style="height:200px; width:100%; object-fit:cover; border-radius:5px;">
-                            <div class="mt-2">
-                                <h5>{{ $item->name }}</h5>
-                            </div>
+            @endforeach
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+    @else
+    <p class="text-center mt-5">No products available.</p>
+    @endif
+
+    <!-- Trending Products Section -->
+    @if(isset($products) && count($products) > 0)
+    <div class="container mt-5">
+        <h2 class="mb-3">Trending Products</h2>
+        <div class="row">
+            @foreach ($products as $item)
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <a href="{{ url('details/'.$item->id) }}">
+                        <img src="{{ $item->gallery }}" class="card-img-top" style="height:200px; object-fit:cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $item->name }}</h5>
                         </div>
-                    @endforeach
+                    </a>
                 </div>
             </div>
-
+            @endforeach
         </div>
     </div>
+    @endif
+
+</div>
 @endsection

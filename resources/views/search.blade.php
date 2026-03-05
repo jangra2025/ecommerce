@@ -3,45 +3,55 @@
 @section('content')
 
 <div class="container">
-    <div class="row">
+<div class="row">
 
-        <!-- Left Side Filter -->
-        <div class="col-md-3">
-            <h4>Filter</h4>
-        </div>
+<!-- Left Filter -->
+<div class="col-md-3">
+<h4>Filter</h4>
+</div>
 
-        <!-- Right Side Results -->
-        <div class="col-md-9">
-            <h4>Result For Products</h4>
+<!-- Product Results -->
+<div class="col-md-9">
 
-            @if(count($products) > 0)
+<h4 class="mb-4">Result For Products</h4>
 
-                @foreach ($products as $item)
-                    <div class="card mb-3 p-3">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <img src="{{ asset($item->gallery) }}"
-                                     
-                                     style="height:250px;width:500px;">
-                            </div>
+@if(!empty($products) && count($products) > 0)
 
-                            <div class="col-md-8">
-                                <a href="{{ url('detail/'.$item->id) }}">
-                                    <h5>{{ $item->name }}</h5>
-                                </a>
-                                <p>{{ $item->description }}</p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+@foreach ($products as $item)
 
-            @else
-                <h5>No Products Found</h5>
-            @endif
+<div class="card mb-3 p-3">
+<div class="row align-items-center">
 
-        </div>
+<div class="col-md-4 text-center">
+<img src="{{ asset($item->gallery) }}"
+class="img-fluid"
+style="height:200px; object-fit:contain;">
+</div>
 
-    </div>
+<div class="col-md-8">
+
+<a href="{{ url('detail/'.$item->id) }}">
+<h5>{{ $item->name }}</h5>
+</a>
+
+<p>{{ $item->description }}</p>
+
+</div>
+
+</div>
+</div>
+
+@endforeach
+
+@else
+
+<h5>No Products Found</h5>
+
+@endif
+
+</div>
+
+</div>
 </div>
 
 @endsection
